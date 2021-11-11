@@ -13,11 +13,6 @@ const useStyles = makeStyles((theme) => ({
 const DropDownMenu = ({ anchorEl, handleCloseMenu }) => {
   const classes = useStyles();
 
-  const logOutFunc = () => {
-    handleCloseMenu();
-    window.close();
-  };
-
   return (
     <Menu
       anchorEl={anchorEl}
@@ -39,9 +34,6 @@ const DropDownMenu = ({ anchorEl, handleCloseMenu }) => {
         <Link to="/my-list" onClick={handleCloseMenu} className={classes.link}>
           My List
         </Link>
-      </MenuItem>
-      <MenuItem onClick={logOutFunc} style={{ color: "red" }}>
-        Log Out
       </MenuItem>
     </Menu>
   );
