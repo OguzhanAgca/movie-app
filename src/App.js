@@ -20,7 +20,7 @@ const App = () => {
             <Route exact path="/" component={Home} />
             <Route exact path="/movies" component={MovieList} />
             <Route exact path="/add-movie" component={AddMovie} />
-            <Route exact path="/movies/:id" component={MovieDetails} />
+            <Route exact path="/movie/:id" component={MovieDetails} />
             <Route exact path="/my-list" component={ListDetails} />
           </Switch>
         </Grid>

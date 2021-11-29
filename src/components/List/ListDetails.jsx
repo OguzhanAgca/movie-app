@@ -1,16 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getListDetails } from "../../actions/listActions";
-import {
-  Container,
-  Grid,
-  Typography,
-  Paper,
-  Card,
-  CardContent,
-} from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import noImage from "../../images/noImage.png";
+import ListOfMovies from "./ListOfMovies";
+import TopScroll from "../layouts/TopScroll";
 
 const useStyles = makeStyles((theme) => ({
   listOwner: {
@@ -47,22 +42,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
   },
-  moviePoster: {
-    width: "150px",
-  },
   listItems: {
     margin: "1.5rem 0 0.8rem 0",
     backgroundColor: "#f5f5f5",
     padding: "1rem",
     borderRadius: "10px",
-  },
-  voteAverage: {
-    fontWeight: "600",
-  },
-  card: {
-    "&:hover": {
-      boxShadow: "0px 0px 23px 5px #000000",
-    },
   },
 }));
 
@@ -164,30 +148,9 @@ const ListDetails = () => {
       <Container>
         <Grid container spacing={1} className={classes.listItems}>
           {item_count > 0 ? (
-            items.map((item, index) => (
-              <Grid item key={index}>
-                <Paper>
-                  <Card className={classes.card}>
-                    <img
-                      className={classes.moviePoster}
-                      src={
-                        "https://www.themoviedb.org/t/p/w600_and_h900_bestv2" +
-                          item.poster_path || noImage
-                      }
-                      alt={item.title}
-                    />
-                    <CardContent>
-                      <Typography
-                        className={classes.voteAverage}
-                        variant="body1"
-                        title="Vote Average"
-                        color="secondary"
-                      >
-                        {item.vote_average}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Paper>
+            items.map((movie, index) => (
+              <Grid item xl={3} md={2} sm={3} xs={6} key={index}>
+                <ListOfMovies movie={movie} />
               </Grid>
             ))
           ) : (
@@ -199,6 +162,8 @@ const ListDetails = () => {
           )}
         </Grid>
       </Container>
+
+      <TopScroll showBelow={250} />
     </>
   );
 };

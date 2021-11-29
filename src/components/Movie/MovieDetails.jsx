@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getMovieDetails } from "../../actions/movieActions";
-import { Link } from "react-router-dom";
+import {
+  addMovie,
+  emptyCurrentMovie,
+  getMovieDetails,
+  getMovies,
+} from "../../actions/movieActions";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import SubdirectoryArrowLeftIcon from "@material-ui/icons/SubdirectoryArrowLeft";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import {
   Button,
   Container,
@@ -81,32 +86,52 @@ const useStyles = makeStyles((theme) => ({
   statisticHeaders: {
     fontWeight: "600",
   },
+  favoriteIconBtn: {
+    cursor: "pointer",
+    "&:hover": {
+      transform: "scale(1.2)",
+    },
+    marginRight: theme.spacing(3),
+  },
+  subHeaders: {
+    textDecoration: "underline",
+  },
 }));
 
 const MovieDetails = ({ history, location, match }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const currentMovie = useSelector((state) => state.movies.currentMovie);
+  const likedMovies = useSelector((state) => state.movies.movies);
   const movieId = match.params.id;
 
   useEffect(() => {
     dispatch(getMovieDetails(movieId));
+    dispatch(getMovies());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const currentMovie = useSelector((state) => state.movies.currentMovie);
+  const turnBackBtn = () => {
+    history.goBack();
+    dispatch(emptyCurrentMovie());
+  };
+
+  const favoriteIconBtn = () => dispatch(addMovie(movieId));
 
   return (
     <>
       <Paper className={classes.paper} elevation={0}>
         <div>
           <div className={classes.header}>
-            <Typography variant="h5" gutterBottom>
-              <Link to="/movies" className={classes.link}>
-                <ArrowBackIosIcon
-                  color="primary"
-                  className={classes.arrowBackIosIcon}
-                />
-              </Link>{" "}
+            <Typography
+              onClick={() => history.goBack()}
+              variant="h5"
+              gutterBottom
+            >
+              <ArrowBackIosIcon
+                color="primary"
+                className={classes.arrowBackIosIcon}
+              />{" "}
               {currentMovie?.title}
             </Typography>
           </div>
@@ -147,7 +172,9 @@ const MovieDetails = ({ history, location, match }) => {
             <Divider orientation="vertical" flexItem />
             <Grid item className={classes.textContent} xs={12} md={5}>
               <div className={classes.statisticField}>
-                <Typography variant="h6">Statistics</Typography>
+                <Typography variant="h6" className={classes.subHeaders}>
+                  Statistics
+                </Typography>
                 <div className={classes.statistics}>
                   <Typography variant="overline">
                     <span className={classes.statisticHeaders}>
@@ -180,14 +207,18 @@ const MovieDetails = ({ history, location, match }) => {
                 </div>
               </div>
               <div className={classes.overviewField}>
-                <Typography variant="h6">Overview</Typography>
+                <Typography variant="h6" className={classes.subHeaders}>
+                  Overview
+                </Typography>
                 <Typography variant="body1">
                   {currentMovie?.overview}
                 </Typography>
               </div>
               <div>
                 <div>
-                  <Typography variant="h6">Production Companies</Typography>
+                  <Typography variant="h6" className={classes.subHeaders}>
+                    Production Companies
+                  </Typography>
                   <div className={classes.companieContainer}>
                     {currentMovie?.production_companies?.map(
                       (companie, index) => (
@@ -200,7 +231,9 @@ const MovieDetails = ({ history, location, match }) => {
                 </div>
 
                 <div>
-                  <Typography variant="h6">Production Countries</Typography>
+                  <Typography variant="h6" className={classes.subHeaders}>
+                    Production Countries
+                  </Typography>
                   <div className={classes.companieContainer}>
                     {currentMovie?.production_countries?.map(
                       (country, index) => (
@@ -226,14 +259,24 @@ const MovieDetails = ({ history, location, match }) => {
               color="primary"
               size="small"
               startIcon={<SubdirectoryArrowLeftIcon />}
+              onClick={turnBackBtn}
             >
-              <Link to="/movies" className={classes.link}>
-                Turn Back
-              </Link>
+              Turn Back
             </Button>
           </Grid>
           <Grid item>
-            <RemoveMovie history={history} movieId={movieId} />
+            {currentMovie &&
+            likedMovies &&
+            likedMovies?.find((m) => m.id === currentMovie.id) ? (
+              <RemoveMovie history={history} movieId={movieId} />
+            ) : (
+              <span
+                className={classes.favoriteIconBtn}
+                onClick={favoriteIconBtn}
+              >
+                <FavoriteBorderIcon color="secondary" />
+              </span>
+            )}
           </Grid>
         </Grid>
       </Paper>

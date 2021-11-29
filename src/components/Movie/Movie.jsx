@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   Button,
   Card,
@@ -9,8 +11,10 @@ import {
   Paper,
   Typography,
 } from "@material-ui/core";
+import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
+import { addMovie, removeMovie } from "../../actions/movieActions";
 import noImage from "../../images/noImage.png";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,10 +42,17 @@ const useStyles = makeStyles((theme) => ({
     marginRight: "1rem",
     cursor: "context-menu",
   },
+  favoriteIcon: {
+    cursor: "pointer",
+    "&:hover": {
+      transform: "scale(1.2)",
+    },
+  },
 }));
 
 const Movie = ({ movie }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const {
     poster_path,
     id,
@@ -50,7 +61,12 @@ const Movie = ({ movie }) => {
     overview,
     release_date,
     vote_average,
+    liked,
   } = movie;
+
+  const addFavoriteBtn = () => dispatch(addMovie(id));
+  const removeFavoriteBtn = () => dispatch(removeMovie(id));
+
   return (
     <Paper>
       <Card className={classes.card}>
@@ -87,10 +103,23 @@ const Movie = ({ movie }) => {
         </CardContent>
         <CardActions className={classes.cardActions}>
           <Button variant="contained" color="primary" size="small">
-            <Link to={`/movies/${id}`} className={classes.link}>
+            <Link to={`movie/${id}`} className={classes.link}>
               More..
             </Link>
           </Button>
+          {!liked ? (
+            <FavoriteBorderIcon
+              onClick={addFavoriteBtn}
+              className={classes.favoriteIcon}
+              color="secondary"
+            />
+          ) : (
+            <FavoriteIcon
+              onClick={removeFavoriteBtn}
+              className={classes.favoriteIcon}
+              color="secondary"
+            />
+          )}
           <Typography
             className={classes.voteAverage}
             variant="body1"

@@ -2,6 +2,7 @@ import { FETCH_LIST_DETAILS } from "../actions/types";
 
 const initialState = {
   list: {},
+  listItems: null,
 };
 
 export default function listReducer(state = initialState, action) {

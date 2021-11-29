@@ -1,8 +1,12 @@
 import {
+  FETCH_UPCOMING_MOVIES,
   FETCH_MOVIES,
+  FETCH_POPULAR_MOVIES,
+  FETCH_TOP_RATED_MOVIES,
   REMOVE_MOVIE,
   SEARCH_MOVIE,
   SINGLE_MOVIE,
+  EMPTY_CURRENT_MOVIE,
 } from "./types";
 import * as api from "../api/index";
 import { clearErrors, returnError } from "./errorActions";
@@ -36,11 +40,13 @@ export const addMovie = (movieId) => async (dispatch) => {
 
   await api
     .addMovie(body, config)
-    .then(() => {
+    .then((res) => {
+      //! I call getMovies dispatch because API does not return to me added movie
+      dispatch(getMovies());
       dispatch(clearErrors());
     })
     .catch((err) => {
-      dispatch(returnError(err.response.data, err.response.status));
+      dispatch(returnError(err, err));
     });
 };
 
@@ -55,7 +61,7 @@ export const searchMovie = (body) => async (dispatch) => {
       });
     })
     .catch((err) => {
-      dispatch(returnError(err.response.data, err.response.status));
+      dispatch(returnError(err, err));
     });
 };
 
@@ -70,7 +76,7 @@ export const getMovieDetails = (movieId) => async (dispatch) => {
       dispatch(clearErrors());
     })
     .catch((err) => {
-      dispatch(returnError(err.response.data, err.response.status));
+      dispatch(returnError(err, err));
     });
 };
 
@@ -97,6 +103,52 @@ export const removeMovie = (movieId) => async (dispatch) => {
       dispatch(clearErrors());
     })
     .catch((err) => {
-      dispatch(returnError(err.response.data, err.response.status));
+      dispatch(returnError(err, err));
+    });
+};
+
+export const emptyCurrentMovie = () => async (dispatch) => {
+  await dispatch({ type: EMPTY_CURRENT_MOVIE });
+};
+
+export const getPopularMovies = () => async (dispatch) => {
+  await api
+    .getPopularMovies()
+    .then((res) => {
+      dispatch({
+        type: FETCH_POPULAR_MOVIES,
+        payload: res.data.results,
+      });
+    })
+    .catch((err) => {
+      dispatch(returnError(err, err));
+    });
+};
+
+export const getTopRatedMovies = () => async (dispatch) => {
+  await api
+    .getTopRatedMovies()
+    .then((res) => {
+      dispatch({
+        type: FETCH_TOP_RATED_MOVIES,
+        payload: res.data.results,
+      });
+    })
+    .catch((err) => {
+      dispatch(returnError(err, err));
+    });
+};
+
+export const getUpcomingMovies = () => async (dispatch) => {
+  await api
+    .getUpcomingMovies()
+    .then((res) => {
+      dispatch({
+        type: FETCH_UPCOMING_MOVIES,
+        payload: res.data.results,
+      });
+    })
+    .catch((err) => {
+      dispatch(returnError(err, err));
     });
 };

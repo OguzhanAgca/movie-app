@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getMovies } from "../../actions/movieActions";
-import { Container, Grid, LinearProgress } from "@material-ui/core";
+import { Container, Grid, LinearProgress, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Movie from "./Movie";
+import { Link } from "react-router-dom";
+import TopScroll from "../layouts/TopScroll";
 
 const useStyles = makeStyles((theme) => ({
   loading: {
@@ -22,6 +24,19 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "1.2rem",
     padding: "0.5rem",
   },
+  noMovieContainer: {
+    backgroundColor: "#f5f5f5",
+    borderRadius: "10px",
+    marginTop: "1.2rem",
+    padding: "0.5rem",
+    height: "90vh",
+    display: "flex",
+    alignItems: "center",
+  },
+  noMovieField: {
+    height: "60vh",
+    textAlign: "center",
+  },
 }));
 
 const MovieList = () => {
@@ -37,19 +52,43 @@ const MovieList = () => {
     <>
       <Container>
         <Grid container spacing={2} className={classes.movieList}>
-          {movies?.length ? (
-            movies.map((movie, index) => (
-              <Grid item key={index} xs={12} md={4}>
-                <Movie movie={movie} />
-              </Grid>
-            ))
-          ) : (
+          {movies === null ? (
             <div className={classes.loading}>
               <LinearProgress color="primary" />
             </div>
+          ) : movies?.length ? (
+            movies.map((movie, index) => (
+              <Grid item key={index} xs={12} md={4}>
+                <Movie movie={{ ...movie, liked: true }} />
+              </Grid>
+            ))
+          ) : (
+            <Container className={classes.noMovieContainer}>
+              <Grid
+                container
+                justifyContent="space-around"
+                alignContent="center"
+                direction="column"
+                className={classes.noMovieField}
+              >
+                <Grid item>
+                  <Typography color="secondary" variant="h3">
+                    You Don't Have Any Movies
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="overline">
+                    Please <Link to="/add-movie">click here</Link> for add a
+                    movie or <Link to="/">turn back</Link> home.
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Container>
           )}
         </Grid>
       </Container>
+
+      <TopScroll showBelow={250} />
     </>
   );
 };

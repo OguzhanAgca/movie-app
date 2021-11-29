@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Container, Grid, Button, TextField } from "@material-ui/core";
 import SearchedMovie from "./SearchedMovie";
+import TopScroll from "../layouts/TopScroll";
 
 const searchMovieSchema = yup.object({
   search: yup.string().required("Search field is required."),
@@ -78,6 +79,8 @@ const AddMovie = () => {
             : null}
         </Grid>
       </Container>
+
+      <TopScroll showBelow={250} />
     </>
   );
 };

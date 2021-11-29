@@ -10,7 +10,7 @@ const RemoveMovie = ({ history, movieId }) => {
   const removeMovieBtn = () => {
     dispatch(removeMovie(movieId));
     alertify.notify("Movie deleted successfully.", "success", 5);
-    history.push("/movies");
+    history.goBack();
   };
 
   return (

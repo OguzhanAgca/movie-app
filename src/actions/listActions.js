@@ -12,6 +12,19 @@ export const getListDetails = () => async (dispatch) => {
       });
     })
     .catch((err) => {
-      dispatch(returnError(err.response.data, err.response.status));
+      dispatch(returnError(err, err));
     });
+};
+
+export const removeMovieFromList = (movieId) => async (dispatch) => {
+  const body = JSON.stringify({ media_id: movieId });
+  const config = {
+    headers: {
+      "Content-type": "application/json",
+    },
+  };
+  await api
+    .removeMovieFromList(body, config)
+    .then(() => dispatch(getListDetails()))
+    .catch((err) => dispatch(returnError(err, err)));
 };
