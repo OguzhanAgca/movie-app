@@ -7,6 +7,11 @@ const useStyles = makeStyles((theme) => ({
   link: {
     color: "inherit",
     textDecoration: "none",
+    padding: "6px 16px",
+    width: "100%",
+  },
+  menuItem: {
+    padding: 0,
   },
 }));
 
@@ -21,16 +26,16 @@ const DropDownMenu = ({ anchorEl, handleCloseMenu }) => {
       onClose={handleCloseMenu}
       style={{ marginTop: "2rem" }}
     >
-      <MenuItem>
+      <MenuItem className={classes.menuItem}>
         <Link
           to="/add-movie"
           onClick={handleCloseMenu}
           className={classes.link}
         >
-          Add Film
+          Add Movie
         </Link>
       </MenuItem>
-      <MenuItem>
+      <MenuItem className={classes.menuItem}>
         <Link to="/my-list" onClick={handleCloseMenu} className={classes.link}>
           My List
         </Link>

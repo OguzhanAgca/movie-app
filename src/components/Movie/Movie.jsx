@@ -16,6 +16,7 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import { makeStyles } from "@material-ui/core/styles";
 import { addMovie, removeMovie } from "../../actions/movieActions";
 import noImage from "../../images/noImage.png";
+import "../../style/ScrollBar.css";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -92,7 +93,12 @@ const Movie = ({ movie }) => {
               Release Date: {release_date}
             </Typography>
           </div>
-          <Typography variant="body2" color="textSecondary" component="p">
+          <Typography
+            className="scroll"
+            variant="body2"
+            color="textSecondary"
+            component="p"
+          >
             {overview?.substring(0, 200) + "..."}
           </Typography>
           <Chip

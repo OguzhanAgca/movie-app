@@ -96,6 +96,11 @@ const useStyles = makeStyles((theme) => ({
   subHeaders: {
     textDecoration: "underline",
   },
+  favoriteBorderIcon: {
+    "&:hover": {
+      transform: "scale(1.2)",
+    },
+  },
 }));
 
 const MovieDetails = ({ history, location, match }) => {
@@ -274,7 +279,10 @@ const MovieDetails = ({ history, location, match }) => {
                 className={classes.favoriteIconBtn}
                 onClick={favoriteIconBtn}
               >
-                <FavoriteBorderIcon color="secondary" />
+                <FavoriteBorderIcon
+                  className={classes.favoriteBorderIcon}
+                  color="secondary"
+                />
               </span>
             )}
           </Grid>

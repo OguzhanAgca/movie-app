@@ -44,7 +44,7 @@ const AppNavBar = () => {
                 <Grid item>
                   <Typography variant="h6">
                     <Link to="/movies" className={classes.link}>
-                      My Films
+                      My Movies
                     </Link>
                   </Typography>
                 </Grid>
